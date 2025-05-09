@@ -1,0 +1,1 @@
+Nesta seção, configuramos o Airflow, uma plataforma de orquestração de trabalho, aprendendo a automatizar e monitorar fluxos de trabalho complexos de engenharia de dados, essenciais para a eficiência e escalabilidade das operações de dados.

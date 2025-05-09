@@ -45,3 +45,12 @@ engenharia-dados/
 ├── dados_exemplo/                # Dados simulados utilizados no projeto
 └── README.md                     # Descrição geral do projeto
 
+
+---
+
+📚 **Créditos e Referência:**
+
+Este projeto foi desenvolvido com base no [Bootcamp Engenharia de Dados: Construa um Projeto Real](https://www.udemy.com/course/bootcamp-engenharia-de-dados) disponível na Udemy, ministrado por Fernando Amaral.
+
+Todo o conteúdo aqui foi adaptado e reestruturado para fins de aprendizado, prática e portfólio pessoal.
+

@@ -49,4 +49,59 @@ ssh -i keypairaws.pem ubuntu@<ENDERECO-IP>
 
 ---
 
-📌 Este documento será atualizado com os próximos passos: instalação do Docker, Docker Compose, Airflow, e criação da DAG.
+## 🌐 Etapa 4: Liberando a Porta 8080 (Interface Web do Airflow)
+
+Para acessar o Airflow via navegador, é necessário liberar a porta **8080** na instância EC2:
+
+1. Clique na sua instância no painel do EC2
+2. Vá até a aba **Segurança**
+3. Clique em **Editar regras de entrada (Edit inbound rules)**
+4. Adicione uma nova regra com os seguintes dados:
+
+| Campo      | Valor                   |
+|------------|--------------------------|
+| **Type**   | `Custom TCP`            |
+| **Port**   | `8080`                  |
+| **Source** | `Anywhere (0.0.0.0/0)`  |
+
+> ⚠️ Use "Anywhere" apenas para ambientes de estudo. Em produção, restrinja por IP.
+
+---
+
+## 🧩 Etapa 5: Acessando a Instância via SSH
+
+Para configurar o Airflow, é necessário acessar a instância criada utilizando um terminal (Prompt de Comando, Terminal Linux, ou VS Code com SSH).
+
+### ✅ Acesso rápido via Console AWS
+
+1. No painel da EC2, clique em sua instância
+2. Clique em **Connect**
+3. Selecione a aba **SSH Client**
+4. Copie o comando de exemplo sugerido, como:
+
+```bash
+ssh -i "keypairaws.pem" ubuntu@ec2-13-58-82-73.us-east-2.compute.amazonaws.com
+```
+
+---
+
+### 🧭 Como executar o comando corretamente
+
+#### Opção 1 – Especificar o caminho da chave:
+
+```bash
+ssh -i "C:/Users/SeuUsuario/Downloads/keypairaws.pem" ubuntu@<ENDERECO-IP>
+```
+
+#### Opção 2 – Navegar até a pasta da chave antes de rodar:
+
+```bash
+cd C:/Users/SeuUsuario/Downloads/
+ssh -i "keypairaws.pem" ubuntu@<ENDERECO-IP>
+```
+
+> 💡 Dica: No primeiro acesso, digite `yes` se for perguntado sobre a autenticidade do host.
+
+---
+
+📌 Próximo passo: instalação do Docker, Docker Compose e o ambiente do Airflow.

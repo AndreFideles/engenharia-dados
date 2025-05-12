@@ -30,66 +30,51 @@ Esta etapa descreve a criação da DAG no Airflow para orquestrar o processo de 
 
 ## ⚙️ Estrutura da DAG
 
-A DAG é escrita em Python e usa `PythonOperator`. Abaixo um exemplo da estrutura simplificada:
+A DAG é escrita em Python e usa `@task` com o decorador `@dag`. Abaixo uma estrutura simplificada:
 
 ```python
-from airflow import DAG
-from airflow.operators.python_operator import PythonOperator
+from airflow.decorators import dag, task
 
-with DAG("etl_novadrive", ...) as dag:
-    for table in ["veiculos", "vendedores", "vendas"]:
-        get_max = PythonOperator(task_id=f"get_max_id_{table}", python_callable=...)
-        load = PythonOperator(task_id=f"load_data_{table}", python_callable=...)
-        get_max >> load
+@dag(...)
+def etl():
+    for table in tables:
+        @task
+        def get_max_id(table): ...
+        @task
+        def load_data(table, max_id): ...
+        max_id = get_max_id(table)
+        load_data(table, max_id)
 ```
 
 ---
 
 ## 🔌 Conexões Utilizadas
 
-As conexões foram previamente configuradas no Airflow e referenciadas por seus respectivos **Connection IDs**.
+As conexões são configuradas no Airflow UI com os seguintes `Connection ID`:
 
-### PostgreSQL
-
-| Campo         | Valor de Exemplo         |
-|---------------|--------------------------|
-| Connection Id | `postgres`               |
-| Host          | (personalizado)          |
-| Database      | `novadrive`              |
-| Login         | (personalizado)          |
-| Password      | (personalizado)          |
-| Port          | `5432`                   |
-
-### Snowflake
-
-| Campo         | Valor de Exemplo         |
-|---------------|--------------------------|
-| Connection Id | `snowflake`              |
-| Account       | (personalizado)          |
-| Database      | `NOVADRIVE`              |
-| Schema        | `STAGE`                  |
-| Warehouse     | `DEFAULT_WH`             |
-| Login         | (personalizado)          |
-
-> 🔒 As credenciais exatas utilizadas para conectar ao banco de dados foram substituídas por valores genéricos por questões de segurança.
+- **PostgreSQL:** `postgres`
+- **Snowflake:** `snowflake`
 
 ---
 
-## 🛑 Boas Práticas e Prevenção de Erros
+## 🛑 Boas Práticas
 
-- **Falhas de conexão**: usar `retries` e `retry_delay` nos Operators.
-- **Concorrência acidental**: definir `max_active_runs=1` para evitar DAGs paralelas.
-- **Carga incompleta**: implementar controle de transação (tudo ou nada).
-- **Qualidade de Dados**: implementar validações pós-carga com `pytest` ou queries SQL.
-
----
-
-## 📈 Melhoria Contínua
-
-- Substituir incremental por **UPSERT** (`MERGE`) para garantir consistência de dados.
-- Avaliar uso de `timestamp` ao invés de `id` como critério de carga.
-- Incorporar testes de qualidade via `dbt`.
+- `max_active_runs=1` para evitar execuções paralelas indesejadas
+- `retries`, `retry_delay` e `catchup=False` para controle confiável
+- Tratamento de exceções e validações de qualidade são recomendadas
 
 ---
 
-> ✅ Este processo representa a orquestração automatizada da carga de dados transacionais para o Snowflake, utilizando Airflow com conexão a banco PostgreSQL.
+## 📈 Melhorias Futuras
+
+- Transformar em `UPSERT (MERGE)` em vez de carga bruta
+- Carga incremental com base em `timestamp`
+- Validações com `dbt` ou `Great Expectations`
+
+---
+
+## 📎 Código Fonte da DAG (Airflow 2.8+)
+
+O código completo da DAG `postgres_to_snowflake`, compatível com Airflow 2.8+, está disponível abaixo:
+
+📄 [`postgres_to_snowflake_v2.8.py`](postgres_to_snowflake_v2.8.py)

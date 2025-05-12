@@ -119,3 +119,11 @@ Este documento reúne os principais conceitos, arquiteturas e recursos do Snowfl
 ---
 
 > ✅ Este material faz parte do projeto prático de Engenharia de Dados (NovaDrive Motors) e será usado como documentação oficial da seção Snowflake no portfólio.
+
+---
+
+## 📎 Script de Criação de Estrutura
+
+Você pode baixar o script `.sql` com toda a estrutura de tabelas do projeto NovaDrive para execução no Snowflake:
+
+📄 [`novadrive_snowflake_estrutura.sql`](novadrive_snowflake_estrutura.sql)
